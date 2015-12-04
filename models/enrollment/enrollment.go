@@ -1,11 +1,12 @@
 package enrollment
 
 import (
-	
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Enrollment struct {
-	Id int
+	Id bson.ObjectId
+	EnrollmentNumber int
 	Applicant PersonData
 	Dependant PersonData
 	Address Address

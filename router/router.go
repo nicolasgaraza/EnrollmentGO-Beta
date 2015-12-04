@@ -7,6 +7,8 @@ import (
 	"github.com/nicolas.garaza/models/enrollment"
 	"net/http"
 	"github.com/nicolas.garaza/controllers/zipCode"
+	zipCodeModel "github.com/nicolas.garaza/models/zipCode"
+	//"io/ioutil"
 )
 
 func RegisterEnrollmentRoutes() *httprouter.Router {
@@ -21,6 +23,28 @@ func myRouterConfig(router *httprouter.Router) {
 	router.GET("/", homeHandler)
 
 	router.GET("/enrollment", getEnrollments)
+	
+	router.GET("/zipCode/:code", func (w http.ResponseWriter, req *http.Request, ps httprouter.Params){
+		fmt.Printf("%+v\n", ps.ByName("code"))
+	})
+	
+	router.POST("/zipCode", func (w http.ResponseWriter, req *http.Request, ps httprouter.Params){
+	
+		controller := zipCode.New()	
+	
+		z := zipCodeModel.ZipCode{}
+		
+		json.NewDecoder(req.Body).Decode(&z)
+		
+		fmt.Printf("%+v\n", z)
+		controller.Post(z);
+		
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		
+				
+	})
+	
 
 	router.GET("/zipCode", func (w http.ResponseWriter, req *http.Request, _ httprouter.Params){
 	
@@ -28,19 +52,21 @@ func myRouterConfig(router *httprouter.Router) {
 		controller := zipCode.New()	
 	
 		z, er:= controller.Get()
-		
-		if er != nil{
+		fmt.Printf("%+v\n", z)
+		if er == nil{
 			ej, _ := json.Marshal(z)
 	
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(200)
 			fmt.Fprintf(w, "%s", ej)
+			return
 			
 		}else {
 			
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(500)
 			fmt.Fprintf(w, "%s", er)
+			return
 		}
 		
 		ej, _ := json.Marshal(z)
@@ -58,7 +84,7 @@ func myRouterConfig(router *httprouter.Router) {
 func getEnrollments(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 
 	var e = enrollment.Enrollment{
-		Id: 123,
+		//Id: 123,
 	}
 	
 	array:= []enrollment.Enrollment{

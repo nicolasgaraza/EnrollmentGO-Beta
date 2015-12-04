@@ -1,13 +1,11 @@
 package enrollment
 
-import (
-
-)
+import ()
 
 type Address struct {
-	Line1 string
-	Line2 string
+	Line1   string
+	Line2   string
 	ZipCode string
-	State string
-	City string
+	State   string
+	City    string
 }
