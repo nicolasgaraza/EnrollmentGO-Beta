@@ -4,15 +4,15 @@ import (
 	//"fmt"
 	"github.com/codegangsta/negroni"
 	//"github.com/julienschmidt/httprouter"
+	"github.com/nicolas.garaza/router"
 	"log"
 	"net/http"
-	"github.com/nicolas.garaza/router"
 )
 
 func main() {
-	
-	r:= router.RegisterEnrollmentRoutes()
-	
+
+	r := router.RegisterEnrollmentRoutes()
+
 	// Middleware stack
 	n := negroni.New(
 		negroni.NewRecovery(),
@@ -25,8 +25,6 @@ func main() {
 
 	n.Run(":8080")
 }
-
-
 
 func MyMiddleware(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	log.Println("Logging on the way there...")
